@@ -1,0 +1,118 @@
+-
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	*{
+		font-size:15px; ; 
+	}
+	.box{
+		width: 300px;
+		height: 300px;
+			background: pink;
+			float: left;
+				margin-left: 200px;
+	}
+  .content{
+  	width: 300px;
+  	height: 300px;
+  	background: red;
+  	float: left;
+  	margin-left: 200px;
+
+  }
+
+</style>
+</head>
+<body>
+<div class="box">
+	文章名字：<input type="text" id="cona"><br />
+	文章内容：<input type="text" id="con"><br />
+	<button id="btn">发布</button>
+</div>
+<div class="content">
+	<span id="content2"></span>
+	<span id="content3"></span>
+
+
+</div>
+
+
+	<script type="text/javascript">
+
+
+
+		btn.onclick = function(){
+			ajax({
+				url:'http://localhost:7000',
+				type:'get',
+				data:{
+					user:cona.value,
+					pass:con.value
+				},
+				success:function(data){
+					console.log(data)
+					   var a=JSON.parse(data)
+					   console.log(typeof a)
+					content2.innerHTML=a.user;
+					content3.innerHTML=a.pass;
+
+				},
+
+				error:function(){
+					console.log('服务器错误')
+				}
+			})
+		}
+
+
+
+		function ajax(option){
+			var arr = []
+			for(var i in option.data){
+				//console.log(i)
+				arr.push(i+'='+option.data[i])
+			}
+			var str = '';
+			str = arr.join('&')
+			//console.log(arr.join('&'));           //对象{user:xiebin，pass:12345}
+			// 2  [user=xiebin，pass=12345]
+			//3.
+			var xhr = new XMLHttpRequest();
+			xhr.open(option.type,option.url+'?'+str,true);
+			xhr.send();
+
+
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState == 4){
+
+					if(xhr.status >= 200 && xhr.status < 300 || xhr.status ==304){
+
+
+						option.success(xhr.responseText)
+
+						//console.log(xhr.responseText)
+					}else{
+						option.error()
+						//console.log('服务器错误！')
+					}
+
+				}
+			}
+
+
+		}
+
+
+
+
+
+
+
+
+
+	</script>
+</body>
+</html>
